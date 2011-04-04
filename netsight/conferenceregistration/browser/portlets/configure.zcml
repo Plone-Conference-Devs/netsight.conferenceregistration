@@ -1,0 +1,21 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:grok="http://namespaces.zope.org/grok"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="netsight.ploneconf2010_registration">
+
+    <!-- Grok the package to initialise schema interfaces and content classes -->
+    <grok:grok package="." />
+
+
+    <plone:portlet
+        name="ploneconf2010.cart"
+        interface=".cart.IRegistrationsPortlet"
+        assignment=".cart.Assignment"
+        renderer=".cart.Renderer"
+        addview=".cart.AddForm"
+        />
+
+</configure>

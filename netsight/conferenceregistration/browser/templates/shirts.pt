@@ -1,0 +1,9 @@
+<h1>Shirts</h1>
+<table border="1">
+<tr><th>Size</th><th>Actual (<tal:block tal:replace="view/total" />)</th><th>Guess (300)</th></tr>
+<tr tal:repeat="shirt view/shirts">
+  <td tal:content="shirt/size"></td>
+  <td tal:content="shirt/actual"></td>
+  <td tal:content="shirt/guess"></td>
+</tr>
+</table>

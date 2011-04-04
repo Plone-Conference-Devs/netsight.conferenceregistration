@@ -1,0 +1,50 @@
+<html xmlns="http://www.w3.org/1999/xhtml" xml:lang="en"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      lang="en"
+      metal:use-macro="context/main_template/macros/master"
+      i18n:domain="plone">
+  <body>
+
+   <metal:block 
+       fill-slot="top_slot"
+       tal:define="disable_column_one python:request.set('disable_plone.leftcolumn',1);
+                   disable_column_two python:request.set('disable_plone.rightcolumn',1);" />
+
+
+    <metal:main fill-slot="main">
+
+      
+      <h1>Registrations</h1>
+<style type="text/css">
+  .unpaid { background-color: red }
+</style>
+      <table class="listing">
+      <tr>
+        <th>UID</th>
+        <th>First Name</th>
+	<th>Last Name</th>
+	<th>Country</th>
+	<th>Status</th>
+	<th>Send email</th>
+      </tr>
+      <tr tal:repeat="reg view/registrations"
+          tal:attributes="class python:reg['status'] == 'unpaid' and 'unpaid' or repeat['reg'].odd() and 'odd' or 'even'">
+        <td><a tal:attributes="href reg/url" tal:content="reg/uid">uid</a></td>
+        <td tal:content="reg/firstname">firstname</td>
+        <td tal:content="reg/lastname">lastname</td>
+        <td tal:content="reg/country">country</td>
+        <td tal:condition="reg/order_id">
+           <a tal:content="reg/status" tal:attributes="href string:/@@admin-manage-order/${reg/order_id}/@@admin">status</a>
+        </td>
+        <td tal:condition="not:reg/order_id" tal:content="reg/status">status</td>
+	<td><a tal:condition="python:reg['status'] == 'unpaid'" tal:attributes="href string:${reg/url}/@@sendemail">send email</a></td>
+
+      </tr>
+      </table>
+      
+    </metal:main>
+
+  </body>
+</html>

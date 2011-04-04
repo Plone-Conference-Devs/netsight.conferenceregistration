@@ -1,0 +1,3 @@
+<tal:block tal:repeat="email view/emails">
+  <tal:block tal:replace="email" />
+</tal:block>

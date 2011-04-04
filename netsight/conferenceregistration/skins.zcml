@@ -1,0 +1,9 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:cmf="http://namespaces.zope.org/cmf"
+    i18n_domain="netsight.ploneconf2010_registration">
+
+  <!-- File System Directory Views registration -->
+  <cmf:registerDirectory name="netsight_ploneconf2010_registration_custom_images"/>
+
+</configure>

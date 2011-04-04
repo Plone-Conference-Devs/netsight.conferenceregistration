@@ -1,0 +1,67 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:grok="http://namespaces.zope.org/grok"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:plone="http://namespaces.plone.org/plone"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="netsight.ploneconf2010_registration">
+
+    <!-- Grok the package to initialise schema interfaces and content classes -->
+    <grok:grok package="." />
+    <include package=".portlets" />
+
+    <browser:page
+      for="*"
+      name="mailinglist"
+      class=".views.mailinglist"
+      template="templates/mailinglist.pt"
+      permission="zope2.View"
+     />
+
+    <browser:page
+      for="*"
+      name="shirts"
+      class=".views.shirts"
+      template="templates/shirts.pt" 
+      permission="zope2.View"
+     />
+
+    <browser:page
+      for="*"
+      name="food"
+      class=".views.food"
+      template="templates/food.pt"
+      permission="zope2.View"
+     />
+
+    <browser:page
+      for="*"
+      name="sprintscount"
+      class=".views.sprints"
+      permission="zope2.View"
+     />
+
+    <browser:page
+      for="*"
+      name="badges"
+      class=".views.badges"
+      permission="zope2.View"
+     />
+
+
+    <browser:page
+      for="*"
+      name="registrations"
+      class=".views.registrations"
+      template="templates/registrations.pt"
+      permission="zope2.View"
+     />
+
+    <browser:page
+      for="netsight.ploneconf2010_registration.attendee.IAttendee"
+      name="sendemail"
+      class=".email.email"
+      permission="zope2.View"
+     />
+
+</configure>

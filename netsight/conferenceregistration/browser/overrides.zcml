@@ -1,0 +1,58 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser"
+    xmlns:i18n="http://namespaces.zope.org/i18n"
+    i18n_domain="netsight.ploneconf2010_registration">
+
+
+
+<browser:viewlet
+     name="cart-actions"
+     template="templates/cart-actions.pt"
+     manager="Products.PloneGetPaid.interfaces.IGetPaidCartViewletManager"
+     class=".cart.ShoppingCartActions"
+     permission="zope2.View"
+     weight="20"
+     />
+
+  <browser:viewlet
+     name="cart-listing"
+     manager="Products.PloneGetPaid.interfaces.IGetPaidCartViewletManager"
+     template="templates/cart-listing.pt"
+     class=".cart.ShoppingCartListing"
+     permission="zope2.View"
+     weight="10"
+     />
+
+  <browser:page
+     for="*"
+     name="getpaid-checkout-wizard"
+     class="getpaid.paypal.browser.paypalbutton.PaypalButtonView"
+     template="templates/paypalbutton.pt"
+     permission="zope2.View"
+     layer="netsight.ploneconf2010_theme.browser.interfaces.IThemeSpecific"
+
+     />
+
+  <browser:viewlet
+     name="order-listing"
+     manager="Products.PloneGetPaid.interfaces.IOrdersAdminManager"
+     template="templates/orders-listing.pt"
+     class=".admin_order.OrderListingComponent"
+     permission="zope2.View"
+     />
+
+  <browser:viewlet
+     name="order-all-items"
+     manager="Products.PloneGetPaid.interfaces.IAdminOrderManager"
+     template="templates/order-item-listing.pt"
+     class=".admin_order.AllItems"
+     permission="zope2.View"
+     />
+
+
+<!--
+     template="templates/vat-config.pt"
+-->
+
+</configure>

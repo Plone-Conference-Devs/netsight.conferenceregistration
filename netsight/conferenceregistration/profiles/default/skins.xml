@@ -1,0 +1,14 @@
+<?xml version="1.0"?>
+<object name="portal_skins" allow_any="False" cookie_persistence="False"
+	default="">
+  
+  <object name="netsight_ploneconf2010_registration_custom_images"
+	  meta_type="Filesystem Directory View"
+	  directory="netsight.ploneconf2010_registration:skins/netsight_ploneconf2010_registration_custom_images"/>
+  
+  <skin-path name="Plone Conf 2010 Registration" based-on="">
+   <layer name="netsight_ploneconf2010_registration_custom_images"
+	   insert-after="custom"/>
+  </skin-path>
+  
+</object>

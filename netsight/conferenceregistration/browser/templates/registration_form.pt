@@ -1,0 +1,66 @@
+<html xmlns="http://www.w3.org/1999/xhtml"
+      xmlns:metal="http://xml.zope.org/namespaces/metal"
+      xmlns:tal="http://xml.zope.org/namespaces/tal"
+      xmlns:i18n="http://xml.zope.org/namespaces/i18n"
+      i18n:domain="plone.z3cform"
+      metal:use-macro="context/main_template/macros/master">
+      
+    <metal:block fill-slot="main">
+        
+        <h1 class="documentFirstHeading" tal:content="view/label | nothing" />
+        
+	<img src="/pc_register.jpg"
+	     class="image-right"
+	     width="281" 
+	     height="216" 
+	     alt="Plone Conference 2009 delegates" />
+
+	<p>To register for Plone Conference 2010, fill in the registration form below.
+	  If you are registering a number of people then you will have a chance to add
+	  multiple registrations to your cart before checking out to pay.</p>
+
+	<p>All payments will be handled via Paypal. You do not need to have a Paypal
+	  account to pay, you can simply enter your credit card details if you want.</p>
+
+	<p>For those of you planning on submitting a talk, we will not be finialising the talk
+	  schedule until much closer to the event, so you should purchase a ticket at the early bird
+	  rate and if you talk is accepted then we will refund you the difference.</p>
+
+	<p>Conference ticket prices:</p>
+	<table class="plain">
+
+	  <tr><th>Ticket</th><th>Price</th><th>Notes</th></tr>
+	  <tr><td>Regular</td><td>&pound;320 (+VAT)</td><td>Available from 1st August</td></tr>
+	  <tr><td>Speaker</td><td>&pound;150 (+VAT)</td><td>Available for accepted speakers only</td></tr>
+
+	</table>
+
+	<p>Unfortunately, due to recent changes in tax laws here in the UK, we have to charge VAT (17.5%)
+	  on all ticket sales regardless of whether you are in the EU or not. You may be able to claim
+	  VAT back through your own tax system.</p>
+
+        <form tal:condition="not:view/getContent"
+              tal:attributes="action request/URL0"
+              method="post">
+
+          <fieldset id="lookup-0">
+          <legend id="lookuplegend-0">Lookup Registration</legend>
+          <p>If you have already attempted to register and not yet paid
+	    you can enter in the registration code you will have been 
+	    sent by email and we can look up your previous details</p>
+<div tal:attributes="class python:request.form.get('key') and 'error' or None">
+<p tal:condition="request/form/key | nothing">Key not found!</p>
+	  <input type="text" name="key" />
+          <input type="submit" value="Lookup" />
+</div>
+          </fieldset>
+        </form>
+
+
+        <div id="content-core">
+            <metal:block use-macro="context/@@ploneform-macros/titlelessform" />
+        </div>
+        
+    </metal:block>
+    
+</html>

@@ -1,0 +1,37 @@
+From: Plone Conference Website <info@ploneconf2010.org>
+Content-Type: text/plain; charset=utf8
+Subject: Plone Conference 2010 Registration
+Message-Id: <A972197E-%(id)s-26245D9D7FD8@netsight.co.uk>
+To: %(email)s
+Cc: info@ploneconf2010.org
+Mime-Version: 1.0 (Apple Message framework v1081)
+X-Mailer: Apple Mail (2.1081)
+
+%(firstname)s,
+
+Thank you for registering for Plone Conference 2010!
+
+You should hopefully have already been directed to Paypal
+to pay for this and any other registrations you made at the
+same time.
+
+If for any reason you were not able to pay at the time
+you can retreive this registration and retry the payment
+by using the following link:
+
+http://www.ploneconf2010.org/register?key=%(key)s
+
+Or going back to the main registration page and entering
+the following key in the first box:
+
+%(key)s
+
+Just to remind you, we need your payment settled before
+you arrive at the event. If for any reason you are unable
+to pay online by card or paypal then please contact us
+at info@ploneconf2010.org
+
+See you in Bristol!
+
+Regards,
+Matt and the Plone Conference Organising Team

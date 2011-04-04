@@ -1,0 +1,37 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope">
+
+
+    <utility
+        component=".vocabularies.countries_vocab"
+        name="netsight.ploneconf2010_registration.countries"
+    />
+
+    <utility
+        component=".vocabularies.tickets_vocab"
+        name="netsight.ploneconf2010_registration.tickets"
+    />
+
+
+    <utility
+        component=".vocabularies.food_vocab"
+        name="netsight.ploneconf2010_registration.food"
+        />
+
+    <utility
+    component=".vocabularies.sprints_vocab"
+        name="netsight.ploneconf2010_registration.sprints"
+	/>
+
+    <utility
+        component=".vocabularies.shirts_vocab"
+	name="netsight.ploneconf2010_registration.shirts"
+	/>
+
+    <utility
+        component=".vocabularies.badgetypes_vocab"
+	name="netsight.ploneconf2010_registration.badgetypes"
+	/>
+
+</configure>
+
