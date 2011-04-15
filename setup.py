@@ -29,6 +29,7 @@ setup(name='netsight.conferenceregistration',
           'Plone',
           'plone.app.dexterity',
           'collective.autopermission',
+          'ore.viewlet',
       ],
       entry_points="""
       # -*- Entry points: -*-

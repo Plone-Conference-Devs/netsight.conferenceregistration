@@ -9,8 +9,8 @@ from z3c.form.form import applyChanges
 from Products.CMFCore.interfaces import ISiteRoot
 from Products.statusmessages.interfaces import IStatusMessage
 
-from netsight.ploneconf2010_registration import _
-from netsight.ploneconf2010_registration.attendee import IAttendee
+from netsight.conferenceregistration import _
+from netsight.conferenceregistration.attendee import IAttendee
 
 from plone.dexterity.utils import createContentInContainer
 
@@ -30,9 +30,9 @@ from Products.CMFCore.utils import getToolByName
 
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 
-from netsight.ploneconf2010_registration.interfaces import IRegistrationFolder
+from netsight.conferenceregistration.interfaces import IRegistrationFolder
 
-from netsight.ploneconf2010_registration.discounts import DISCOUNTS
+from netsight.conferenceregistration.discounts import DISCOUNTS
 
 class ContactGroup(group.Group):
     label=u"Contact Details"
@@ -154,7 +154,7 @@ class RegistrationForm(group.GroupForm, form.Form):
             # Create the attendee object in the attendees folder
             attendees = self.context.attendees
             del data['uid'] # need to remove uid before adding
-            attendee = createContentInContainer(attendees, 'netsight.ploneconf2010_registration.attendee', 
+            attendee = createContentInContainer(attendees, 'netsight.conferenceregistration.attendee', 
                                                 checkConstraints=False, **data)
 
         # Add attendee to shopping cart
@@ -204,7 +204,7 @@ class RegistrationForm(group.GroupForm, form.Form):
             del cart[nitem.item_id]
 
         # copy over information regarding the item
-#        ticket_vocab = queryUtility(IVocabularyFactory, name='netsight.ploneconf2010_registration.tickets')(self.context)
+#        ticket_vocab = queryUtility(IVocabularyFactory, name='netsight.conferenceregistration.tickets')(self.context)
 #        ticket = ticket_vocab.getTerm(attendee.ticket).token
 
         if attendee.discount_code:
@@ -222,7 +222,7 @@ class RegistrationForm(group.GroupForm, form.Form):
 
         # send email with details to get registration back
         if price != 0:
-            from netsight.ploneconf2010_registration.browser.email import email
+            from netsight.conferenceregistration.browser.email import email
             email(attendee, self.context).sendemail()
 
         print "Added!", nitem.item_id

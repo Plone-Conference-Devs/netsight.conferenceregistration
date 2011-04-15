@@ -1,3 +1,3 @@
 <object name="portal_types">
- <object name="netsight.ploneconf2010_registration.attendee" meta_type="Dexterity FTI" />
+ <object name="netsight.conferenceregistration.attendee" meta_type="Dexterity FTI" />
 </object>

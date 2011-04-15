@@ -1,6 +1,6 @@
 <?xml version="1.0"?>
-<object name="netsight.ploneconf2010_registration.attendee" meta_type="Dexterity FTI"
-   i18n:domain="netsight.ploneconf2010_registration" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
+<object name="netsight.conferenceregistration.attendee" meta_type="Dexterity FTI"
+   i18n:domain="netsight.conferenceregistration" xmlns:i18n="http://xml.zope.org/namespaces/i18n">
  
  <!-- Basic metadata -->
  <property name="title" i18n:translate="">Attendee</property>
@@ -12,10 +12,10 @@
  <property name="allowed_content_types" />
  
  <!-- schema interface -->
- <property name="schema">netsight.ploneconf2010_registration.attendee.IAttendee</property> 
+ <property name="schema">netsight.conferenceregistration.attendee.IAttendee</property> 
  
  <!-- class used for content items -->
- <property name="klass">netsight.ploneconf2010_registration.attendee.Attendee</property>
+ <property name="klass">netsight.conferenceregistration.attendee.Attendee</property>
  
  <!-- add permission -->
  <property name="add_permission">zope2.View</property>

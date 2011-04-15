@@ -4,33 +4,33 @@
 
     <utility
         component=".vocabularies.countries_vocab"
-        name="netsight.ploneconf2010_registration.countries"
+        name="netsight.conferenceregistration.countries"
     />
 
     <utility
         component=".vocabularies.tickets_vocab"
-        name="netsight.ploneconf2010_registration.tickets"
+        name="netsight.conferenceregistration.tickets"
     />
 
 
     <utility
         component=".vocabularies.food_vocab"
-        name="netsight.ploneconf2010_registration.food"
+        name="netsight.conferenceregistration.food"
         />
 
     <utility
     component=".vocabularies.sprints_vocab"
-        name="netsight.ploneconf2010_registration.sprints"
+        name="netsight.conferenceregistration.sprints"
 	/>
 
     <utility
         component=".vocabularies.shirts_vocab"
-	name="netsight.ploneconf2010_registration.shirts"
+	name="netsight.conferenceregistration.shirts"
 	/>
 
     <utility
         component=".vocabularies.badgetypes_vocab"
-	name="netsight.ploneconf2010_registration.badgetypes"
+	name="netsight.conferenceregistration.badgetypes"
 	/>
 
 </configure>

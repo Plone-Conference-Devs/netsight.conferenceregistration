@@ -30,7 +30,7 @@
   <type type_id="File"/>
   <type type_id="Image"/>
   <type type_id="Plone Site"/>
-  <type type_id="netsight.ploneconf2010_registration.attendee">
+  <type type_id="netsight.conferenceregistration.attendee">
    <bound-workflow workflow_id="attendee_workflow"/>
   </type>
  </bindings>

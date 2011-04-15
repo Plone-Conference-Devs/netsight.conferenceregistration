@@ -6,8 +6,8 @@ from plone.directives import form, dexterity
 from plone.app.textfield import RichText
 from plone.namedfile.field import NamedImage
 
-from netsight.ploneconf2010_registration import _
-from netsight.ploneconf2010_registration.validators import isHttpURL, isEmail, isDiscount
+from netsight.conferenceregistration import _
+from netsight.conferenceregistration.validators import isHttpURL, isEmail, isDiscount
 
 from plone.dexterity.content import Item
 
@@ -57,7 +57,7 @@ class IAttendee(form.Schema):
     country = Choice(
         title=u'Country',
         required=True,
-        vocabulary="netsight.ploneconf2010_registration.countries"
+        vocabulary="netsight.conferenceregistration.countries"
         )
 
     email = TextLine(
@@ -70,7 +70,7 @@ class IAttendee(form.Schema):
 #    ticket = Choice(
 #        title=u'Ticket type',
 #        required=True,
-#        vocabulary="netsight.ploneconf2010_registration.tickets"
+#        vocabulary="netsight.conferenceregistration.tickets"
 #        )
 
     discount_code = TextLine(
@@ -84,7 +84,7 @@ class IAttendee(form.Schema):
     food = Choice(
         title=u'Food preferences',
         required=True,
-        vocabulary="netsight.ploneconf2010_registration.food"
+        vocabulary="netsight.conferenceregistration.food"
         )
 
     food_other = TextLine(
@@ -95,13 +95,13 @@ class IAttendee(form.Schema):
     shirt = Choice(
         title=u'Plone Conference 2010 T-Shirt size',
         required=True,
-        vocabulary="netsight.ploneconf2010_registration.shirts"
+        vocabulary="netsight.conferenceregistration.shirts"
         )
 
     sprints = Choice(
         title=u'Sprints',
         description=u"Will you be attending the developer sprints afterwards (this is not final, it's just so we have a rough idea of numbers)",
-        vocabulary="netsight.ploneconf2010_registration.sprints"
+        vocabulary="netsight.conferenceregistration.sprints"
         )
 
 
@@ -157,7 +157,7 @@ class IAttendee(form.Schema):
     badge_type = Choice(
         title=u'Badge Type',
         required=False,
-        vocabulary="netsight.ploneconf2010_registration.badgetypes"
+        vocabulary="netsight.conferenceregistration.badgetypes"
         )
 
     mailing_list = Bool(

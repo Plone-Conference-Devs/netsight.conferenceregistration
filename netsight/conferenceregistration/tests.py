@@ -9,7 +9,7 @@ from Products.PloneTestCase import PloneTestCase as ptc
 from Products.PloneTestCase.layer import PloneSite
 ptc.setupPloneSite()
 
-import netsight.ploneconf2010_registration
+import netsight.conferenceregistration
 
 
 class TestCase(ptc.PloneTestCase):
@@ -19,7 +19,7 @@ class TestCase(ptc.PloneTestCase):
         @classmethod
         def setUp(cls):
             fiveconfigure.debug_mode = True
-            ztc.installPackage(netsight.ploneconf2010_registration)
+            ztc.installPackage(netsight.conferenceregistration)
             fiveconfigure.debug_mode = False
 
         @classmethod
@@ -32,21 +32,21 @@ def test_suite():
 
         # Unit tests
         #doctestunit.DocFileSuite(
-        #    'README.txt', package='netsight.ploneconf2010_registration',
+        #    'README.txt', package='netsight.conferenceregistration',
         #    setUp=testing.setUp, tearDown=testing.tearDown),
 
         #doctestunit.DocTestSuite(
-        #    module='netsight.ploneconf2010_registration.mymodule',
+        #    module='netsight.conferenceregistration.mymodule',
         #    setUp=testing.setUp, tearDown=testing.tearDown),
 
 
         # Integration tests that use PloneTestCase
         #ztc.ZopeDocFileSuite(
-        #    'README.txt', package='netsight.ploneconf2010_registration',
+        #    'README.txt', package='netsight.conferenceregistration',
         #    test_class=TestCase),
 
         #ztc.FunctionalDocFileSuite(
-        #    'browser.txt', package='netsight.ploneconf2010_registration',
+        #    'browser.txt', package='netsight.conferenceregistration',
         #    test_class=TestCase),
 
         ])
