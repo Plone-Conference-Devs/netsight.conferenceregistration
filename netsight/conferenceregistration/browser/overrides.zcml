@@ -24,7 +24,7 @@
      weight="10"
      />
 
-  <browser:page
+  <!-- <browser:page
      for="*"
      name="getpaid-checkout-wizard"
      class="getpaid.paypal.browser.paypalbutton.PaypalButtonView"
@@ -32,7 +32,7 @@
      permission="zope2.View"
      layer="netsight.ploneconf2010_theme.browser.interfaces.IThemeSpecific"
 
-     />
+     /> -->
 
   <browser:viewlet
      name="order-listing"
