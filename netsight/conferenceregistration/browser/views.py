@@ -3,10 +3,14 @@ from Products.CMFCore.utils import getToolByName
 from zope.component import getUtility
 from getpaid.core.interfaces import IOrderManager
 
-from reportlab.pdfgen import canvas
-from reportlab.lib.units import cm
-from StringIO import StringIO
-from pyPdf import PdfFileReader, PdfFileWriter
+try:
+    from reportlab.pdfgen import canvas
+    from reportlab.lib.units import cm
+    from StringIO import StringIO
+    from pyPdf import PdfFileReader, PdfFileWriter
+    HAS_REPORTLAB = True
+except ImportError:
+    HAS_REPORTLAB = False
 
 import os.path
 
@@ -109,6 +113,9 @@ class badges(BrowserView):
 #    tshirt = "Large"
 
     def __call__(self):
+        if not HAS_REPORTLAB:
+            return 'reportlab not found'
+
         directory, _f = os.path.split(os.path.abspath(__file__))
         badge_silver = os.path.join(directory, 'badge_silver.pdf')
         badge_gold = os.path.join(directory, 'badge_gold.pdf')
