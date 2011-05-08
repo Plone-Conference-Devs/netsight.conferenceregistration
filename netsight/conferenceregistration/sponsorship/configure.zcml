@@ -1,0 +1,14 @@
+<configure
+    xmlns="http://namespaces.zope.org/zope"
+    xmlns:browser="http://namespaces.zope.org/browser">
+
+  <include package="plone.app.registry" />
+
+  <browser:page
+     name="sponsorship-controlpanel"
+     for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+     permission="cmf.ManagePortal"
+     class=".controlpanel.SponsorshipControlPanelView"
+     />
+
+</configure>
