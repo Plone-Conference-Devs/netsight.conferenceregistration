@@ -1,55 +1,19 @@
-import unittest
+import unittest2 as unittest
+import doctest
 
-#from zope.testing import doctestunit
-#from zope.component import testing
-from Testing import ZopeTestCase as ztc
+from netsight.conferenceregistration import testing
 
-from Products.Five import fiveconfigure
-from Products.PloneTestCase import PloneTestCase as ptc
-from Products.PloneTestCase.layer import PloneSite
-ptc.setupPloneSite()
-
-import netsight.conferenceregistration
-
-
-class TestCase(ptc.PloneTestCase):
-
-    class layer(PloneSite):
-
-        @classmethod
-        def setUp(cls):
-            fiveconfigure.debug_mode = True
-            ztc.installPackage(netsight.conferenceregistration)
-            fiveconfigure.debug_mode = False
-
-        @classmethod
-        def tearDown(cls):
-            pass
+optionflags = (doctest.NORMALIZE_WHITESPACE |
+               doctest.ELLIPSIS |
+               doctest.REPORT_NDIFF)
 
 
 def test_suite():
-    return unittest.TestSuite([
-
-        # Unit tests
-        #doctestunit.DocFileSuite(
-        #    'README.txt', package='netsight.conferenceregistration',
-        #    setUp=testing.setUp, tearDown=testing.tearDown),
-
-        #doctestunit.DocTestSuite(
-        #    module='netsight.conferenceregistration.mymodule',
-        #    setUp=testing.setUp, tearDown=testing.tearDown),
-
-
-        # Integration tests that use PloneTestCase
-        #ztc.ZopeDocFileSuite(
-        #    'README.txt', package='netsight.conferenceregistration',
-        #    test_class=TestCase),
-
-        #ztc.FunctionalDocFileSuite(
-        #    'browser.txt', package='netsight.conferenceregistration',
-        #    test_class=TestCase),
-
-        ])
+    install_suite = doctest.DocFileSuite(
+        'sponsorship.txt',
+        optionflags=optionflags)
+    install_suite.layer = testing.CONFERENCE_FUNCTIONAL_TESTING
+    return unittest.TestSuite([install_suite])
 
 if __name__ == '__main__':
     unittest.main(defaultTest='test_suite')

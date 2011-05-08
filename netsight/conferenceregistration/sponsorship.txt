@@ -7,8 +7,8 @@ Sponsorships
 Start with a portal.
 
     >>> from netsight.conferenceregistration import testing
-    >>> app = testing.SERVICES_FUNCTIONAL_TESTING['app']
-    >>> portal = testing.SERVICES_FUNCTIONAL_TESTING['portal']
+    >>> app = testing.CONFERENCE_FUNCTIONAL_TESTING['app']
+    >>> portal = testing.CONFERENCE_FUNCTIONAL_TESTING['portal']
 
 ----------------------------
 Configure Sponsorship Levels

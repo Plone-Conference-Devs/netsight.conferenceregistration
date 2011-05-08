@@ -3,6 +3,8 @@ import os
 
 version = '1.0'
 
+test_require = ['plone.app.testing']
+
 setup(name='netsight.conferenceregistration',
       version=version,
       description="Plone Conference Registration System",
@@ -30,7 +32,10 @@ setup(name='netsight.conferenceregistration',
           'plone.app.dexterity',
           'collective.autopermission',
           'ore.viewlet',
+          'Products.PloneGetPaid',
       ],
+      test_require=test_require,
+      extras_require={'test': test_require},
       entry_points="""
       # -*- Entry points: -*-
 
