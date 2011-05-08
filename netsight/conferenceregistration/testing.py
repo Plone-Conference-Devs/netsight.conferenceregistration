@@ -23,6 +23,8 @@ class ConferenceFixture(testing.PloneSandboxLayer):
         wftool.doActionFor(portal.sponsorships, 'publish')
         testing.logout()
 
+        portal.manage_setLocalRoles('AuthenticatedUsers', ('Contributor',))
+
 CONFERENCE_FIXTURE = ConferenceFixture()
 CONFERENCE_FUNCTIONAL_TESTING = testing.FunctionalTesting(
     bases=(CONFERENCE_FIXTURE,), name="Conference:Functional")
