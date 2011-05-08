@@ -1,38 +1,27 @@
 from five import grok
 from plone.directives import form
 
-from zope import schema
 from z3c.form import button, field, group
 from z3c.form.interfaces import HIDDEN_MODE
 from z3c.form.form import applyChanges
-
-from Products.CMFCore.interfaces import ISiteRoot
-from Products.statusmessages.interfaces import IStatusMessage
 
 from netsight.conferenceregistration import _
 from netsight.conferenceregistration.attendee import IAttendee
 
 from plone.dexterity.utils import createContentInContainer
 
-from plone.supermodel.model import Fieldset
-from plone.supermodel.interfaces import FIELDSETS_KEY
-
-from zope import interface, component
-from zope.component import queryUtility
-from zope.schema.interfaces import IVocabularyFactory
+from zope import component
 
 from zope.app.intid.interfaces import IIntIds
-from getpaid.core import interfaces, item
+from getpaid.core import interfaces
 
-from Products.PloneGetPaid.interfaces import IPayableMarker
-from Products.Five.utilities.marker import mark
 from Products.CMFCore.utils import getToolByName
 
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 
 from netsight.conferenceregistration.interfaces import IRegistrationFolder
 
-from netsight.conferenceregistration.discounts import DISCOUNTS
+from getpaid.brownpapertickets.item import BPTEventLineItem
 
 class ContactGroup(group.Group):
     label=u"Contact Details"
@@ -167,35 +156,24 @@ class RegistrationForm(group.GroupForm, form.Form):
 #            )
 
         portal_url = getToolByName( self.context, 'portal_url').getPortalObject().absolute_url()
-        return self.request.response.redirect('%s/register/@@getpaid-cart' % portal_url)    
+        return self.request.response.redirect('%s/registrations/@@getpaid-cart' % portal_url)    
         
 
     def addToCart(self, attendee):
         utility = component.getUtility( interfaces.IShoppingCartUtility )
         cart = utility.get(self.context, create=True)
-                
-        # get the price for the posting
-        price =  DISCOUNTS.get(attendee.discount_code, 320)
-
-        #code was not in svn
-#        if attendee.ticket == 'speaker':
-#            price = 150
-#        else:
-#            price = 320
-        #elif attendee.ticket == 'test':
-        #    price = 20
-    
-        #code in svn
-        #price = 250
-        #price = 320
-
+        
+        # FIXME: This is using a hardcoded BPT price_id.
+        # Need to let the user select from a list of available prices instead.
+        product_code = '1191596'
+        cost = 259.74
 
         intids = component.getUtility( IIntIds )
         iid = intids.queryId( attendee )
         if iid is None:
             iid = intids.register( attendee )
 
-        nitem = item.PayableLineItem()
+        nitem = BPTEventLineItem()
         nitem.item_id = str(iid) # archetypes uid
         nitem.uid = iid
 
@@ -212,16 +190,16 @@ class RegistrationForm(group.GroupForm, form.Form):
         else:
             nitem.name = "Plone Conference 2010 ticket - %s" % attendee.Title()
         nitem.description = nitem.name # description
-        nitem.cost = price
+        nitem.cost = cost
         nitem.quantity = 1
-        nitem.product_code = nitem.item_id
+        nitem.product_code = product_code
         
         # add to cart
         cart[ nitem.item_id ] = nitem
         cart.last_item = nitem.item_id        
 
         # send email with details to get registration back
-        if price != 0:
+        if cost != 0:
             from netsight.conferenceregistration.browser.email import email
             email(attendee, self.context).sendemail()
 

@@ -42,7 +42,7 @@ class ShoppingCartActions( FormViewlet ):
     def handle_continue_shopping( self, action, data ):
         # Go back to the registration form
         portal = getToolByName( self.context, 'portal_url').getPortalObject()
-        url = portal.absolute_url() + '/register'
+        url = portal.absolute_url() + '/registrations'
         return self.request.RESPONSE.redirect( url )
 
     @form.action(_("Checkout and Pay for Registrations"), condition="doesCartContainItems", name="Checkout")
@@ -50,7 +50,7 @@ class ShoppingCartActions( FormViewlet ):
         # go to order-create
         # force ssl? redirect host? options
         portal = getToolByName( self.context, 'portal_url').getPortalObject()
-        url = portal.absolute_url() + '/register/@@getpaid-checkout-wizard#content'
+        url = portal.absolute_url() + '/registrations/@@getpaid-checkout-wizard#content'
         return self.request.RESPONSE.redirect( url )
 
 
