@@ -5,13 +5,7 @@
     <utility
         component=".vocabularies.countries_vocab"
         name="netsight.conferenceregistration.countries"
-    />
-
-    <utility
-        component=".vocabularies.tickets_vocab"
-        name="netsight.conferenceregistration.tickets"
-    />
-
+        />
 
     <utility
         component=".vocabularies.food_vocab"
@@ -19,19 +13,24 @@
         />
 
     <utility
-    component=".vocabularies.sprints_vocab"
+        component=".vocabularies.sprints_vocab"
         name="netsight.conferenceregistration.sprints"
-	/>
+        />
 
     <utility
         component=".vocabularies.shirts_vocab"
-	name="netsight.conferenceregistration.shirts"
-	/>
+        name="netsight.conferenceregistration.shirts"
+        />
 
     <utility
         component=".vocabularies.badgetypes_vocab"
-	name="netsight.conferenceregistration.badgetypes"
-	/>
+        name="netsight.conferenceregistration.badgetypes"
+        />
+
+    <utility
+        component=".vocabularies.prices_vocab"
+        name="netsight.conferenceregistration.prices"
+        />
 
 </configure>
 

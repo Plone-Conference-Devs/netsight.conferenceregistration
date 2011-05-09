@@ -1,6 +1,13 @@
-from zope.interface import directlyProvides, alsoProvides, implements
+from decimal import Decimal
+from time import time
+from zope.interface import alsoProvides, implements
 from zope.schema.vocabulary import SimpleVocabulary, SimpleTerm
 from zope.schema.interfaces import IVocabularyFactory
+from zope.component.hooks import getSite
+from plone.memoize import ram
+from getpaid.brownpapertickets.interfaces import IBPTOptions
+from getpaid.brownpapertickets.bpt import BrownPaperTicketsClient
+
 
 class to_vocab(object):
     ''' takes a list of (value, token, title) tuples '''
@@ -70,23 +77,41 @@ def badgetypes_vocab(context):
     return SimpleVocabulary.fromValues(badgetypes)
 alsoProvides(badgetypes_vocab, IVocabularyFactory)
 
-#code was not in svn
-#tickets = [(u'Early Bird Ticket (GBP 250 +VAT)', 'earlybird'),
-#           (u'Test Ticket (GBP 20 +VAT)', 'test'),
-#           (u'Regular Ticket (GBP 320 +VAT)', 'regular'),
-#           ]
 
-#code in svn
-tickets = [
-    #(u'Early Bird Ticket (GBP 250 +VAT)', 'earlybird'),
-    (u'Regular Ticket (GBP 320 +VAT)', 'regular'),
-    (u'Speakers Ticket (GBP 150 +VAT)', 'speaker'),
-#    (u'Student Ticket (GBP 100 +VAT)', 'student'),
-    ]
+@ram.cache(lambda *args: time() // 86400)
+def fetch_prices():
+    prices = {}
+    
+    options = IBPTOptions(getSite())
+    client = BrownPaperTicketsClient()
+    res = client('pricelist',
+        id = options.developer_id,
+        # hardcoded to the Plone Conf 2011 event & date
+        event_id = '176269',
+        date_id = '512529',
+        )
+    if res.find('resultcode').text == '000000': # success
+        for node in res.findall('price'):
+            price_id = node.find('price_id').text
+            name = node.find('name').text
+            value = Decimal(node.find('value').text)
+            service_fee = Decimal(node.find('service_fee').text)
+            total_price = value + service_fee
+            prices[price_id] = {
+                'name': name,
+                'value': value,
+                'service_fee': service_fee,
+                'total_price': total_price,
+                'title': u'USD %s - %s' % (total_price, name),
+                }
+    return prices
 
-def tickets_vocab(context):
-    return SimpleVocabulary.fromItems(tickets)
-alsoProvides(tickets_vocab, IVocabularyFactory)
+def prices_vocab(context):
+    terms = []
+    for price_id, price_info in fetch_prices().items():
+        terms.append(SimpleTerm(value=price_id, token=price_id, title=price_info['title']))
+    return SimpleVocabulary(terms)
+alsoProvides(prices_vocab, IVocabularyFactory)
 
 
 shirts = [

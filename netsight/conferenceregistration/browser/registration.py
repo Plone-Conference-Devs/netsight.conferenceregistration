@@ -21,6 +21,7 @@ from Products.CMFCore.utils import getToolByName
 from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 
 from netsight.conferenceregistration.interfaces import IRegistrationFolder
+from netsight.conferenceregistration.vocabularies import fetch_prices
 
 from getpaid.brownpapertickets.item import BPTEventLineItem
 
@@ -37,10 +38,9 @@ class ContactGroup(group.Group):
 
 class TicketGroup(group.Group):
     label=u"Ticket Type"
-    description=u"Please enter any discount code you have been given. If you are a speaker, enter the code 'speaker'"
+    description=u"Please select your price."
     fields=field.Fields(IAttendee).select(
-#        'ticket',
-        'discount_code',
+        'price_id',
         )
 
 class PreferencesGroup(group.Group):
@@ -146,7 +146,7 @@ class RegistrationForm(group.GroupForm, form.Form):
                 raise ValueError, "Tampering with the form!"
             
             for group in self.groups:
-                changes = applyChanges(group, attendee, data)
+                applyChanges(group, attendee, data)
 
         else:
             # Create the attendee object in the attendees folder
@@ -173,10 +173,13 @@ class RegistrationForm(group.GroupForm, form.Form):
         utility = component.getUtility( interfaces.IShoppingCartUtility )
         cart = utility.get(self.context, create=True)
         
-        # FIXME: This is using a hardcoded BPT price_id.
-        # Need to let the user select from a list of available prices instead.
-        product_code = '1191596'
-        cost = 259.74
+        # Look up the price
+        product_code = attendee.price_id
+        prices = fetch_prices()
+        if product_code in prices:
+            cost = float(prices[product_code]['total_price'])
+        else:
+            cost = 311.49
 
         intids = component.getUtility( IIntIds )
         iid = intids.queryId( attendee )
@@ -191,14 +194,7 @@ class RegistrationForm(group.GroupForm, form.Form):
         if nitem.item_id in cart:
             del cart[nitem.item_id]
 
-        # copy over information regarding the item
-#        ticket_vocab = queryUtility(IVocabularyFactory, name='netsight.conferenceregistration.tickets')(self.context)
-#        ticket = ticket_vocab.getTerm(attendee.ticket).token
-
-        if attendee.discount_code:
-            nitem.name = "Plone Conference %s Ticket (%s) - %s" % (year, attendee.discount_code, attendee.Title())
-        else:
-            nitem.name = "Plone Conference %s Ticket - %s" % (year, attendee.Title())
+        nitem.name = "Plone Conference %s Ticket - %s" % (year, attendee.Title())
         nitem.description = nitem.name # description
         nitem.cost = cost
         nitem.quantity = 1

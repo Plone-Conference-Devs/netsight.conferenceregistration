@@ -1,6 +1,5 @@
 import re
 import zope
-from discounts import DISCOUNTS
 
 EMAIL_RE = "^([0-9a-zA-Z_&.+-]+!)*[0-9a-zA-Z_&.+-]+@(([0-9a-zA-Z]([0-9a-zA-Z-]*[0-9a-z-A-Z])?\.)+[a-zA-Z]{2,6}|([0-9]{1,3}\.){3}[0-9]{1,3})$"
 mailre = re.compile(EMAIL_RE)
@@ -32,12 +31,3 @@ def isHttpURL(value):
         return True
     else:
         raise UrlException
-
-def isDiscount(value):
-    if not value:
-        return True
-    if value in DISCOUNTS:
-        return True
-    else:
-        raise DiscountException
-        

@@ -1,13 +1,10 @@
 from five import grok
 from zope.schema import TextLine, Choice, Bool, Int
 
-from plone.directives import form, dexterity
-
-from plone.app.textfield import RichText
-from plone.namedfile.field import NamedImage
+from plone.directives import form
 
 from netsight.conferenceregistration import _
-from netsight.conferenceregistration.validators import isHttpURL, isEmail, isDiscount
+from netsight.conferenceregistration.validators import isEmail
 
 from plone.dexterity.content import Item
 
@@ -67,16 +64,11 @@ class IAttendee(form.Schema):
     ### Ticket type
 
 
-#    ticket = Choice(
-#        title=u'Ticket type',
-#        required=True,
-#        vocabulary="netsight.conferenceregistration.tickets"
-#        )
-
-    discount_code = TextLine(
-        title=u'Discount Code',
-        constraint=isDiscount,
-        required=False,
+    price_id = Choice(
+        title=u'Ticket type',
+        description = u'Ticket prices include service fees.',
+        required=True,
+        vocabulary="netsight.conferenceregistration.prices",
         )
 
     ### Preferences
