@@ -32,52 +32,69 @@ level and an optional maximum number of sponsorships.  Navigate to the
 sponsorship control panel.
 
     >>> admin_browser.getLink('Site Setup').click()
-    >>> admin_browser.getLink('Sponsorships').click()
+    >>> admin_browser.getLink('Sponsorship settings').click()
 
 The name and amount sponsorship level fields are required.
 
-    >>> admin_browser.getControl('Add sponsorship level').click()
-    >>> admin_browser.getControl('Save').click()
-    <...Please correct the indicated errors...
-    ...Name is required, please correct...
-    ...Amount is required, please correct...
+TODO    >>> admin_browser.getControl('Add sponsorship level').click()
+TODO    >>> admin_browser.getControl('Save').click()
+TODO    <...Please correct the indicated errors...
+TODO    ...Name is required, please correct...
+TODO    ...Amount is required, please correct...
 
 Add the gold sponsorship level limited to 1 sponsorship.
 
-    >>> admin_browser.getControl('Add sponsorship level').click()
-    >>> admin_browser.getControl('Name').value = 'Gold'
-    >>> admin_browser.getControl('Amount').value = '5000'
-    >>> admin_browser.getControl('Number Allowed').value = '1'
+TODO    >>> admin_browser.getControl('Add sponsorship level').click()
+TODO    >>> admin_browser.getControl('Name').value = 'Gold'
+TODO    >>> admin_browser.getControl('Amount').value = '5000'
+TODO    >>> admin_browser.getControl('Number Allowed').value = '1'
+
+    >>> admin_browser.getControl('Sponsorship Levels').value = 'Gold,5000,1'
+
     >>> admin_browser.getControl('Save').click()
     >>> print admin_browser.contents
     <...Changes saved...
-    Gold 5000 1...
+    >>> admin_browser.getLink('Sponsorship settings').click()
+    >>> print admin_browser.contents
+    <...Gold,5000,1...
 
 Add a silver sponsorship level limited to 2 sponsorships.
 
-    >>> admin_browser.getControl('Add sponsorship level').click()
-    >>> admin_browser.getControl('Name').value = 'Silver'
-    >>> admin_browser.getControl('Amount').value = '1000'
-    >>> admin_browser.getControl('Number Allowed').value = '2'
+TODO    >>> admin_browser.getControl('Add sponsorship level').click()
+TODO    >>> admin_browser.getControl('Name').value = 'Silver'
+TODO    >>> admin_browser.getControl('Amount').value = '1000'
+TODO    >>> admin_browser.getControl('Number Allowed').value = '2'
+
+    >>> admin_browser.getControl(
+    ...     'Sponsorship Levels').value += '\nSilver,1000,2'
+
     >>> admin_browser.getControl('Save').click()
     >>> print admin_browser.contents
     <...Changes saved...
-    Gold 5000 1...
-    Silver 1000 2...
+    >>> admin_browser.getLink('Sponsorship settings').click()
+    >>> print admin_browser.contents
+    <...Gold,5000,1
+    Silver,1000,2...
 
 The 'Number Allowed' field is optional.  If left blank then there is
 no limit to the number of sponsorships.  Add a bronze sponsorship
 level without a limit to the number of sponsorships.
 
-    >>> admin_browser.getControl('Add sponsorship level').click()
-    >>> admin_browser.getControl('Name').value = 'Bronze'
-    >>> admin_browser.getControl('Amount').value = '200'
+TODO    >>> admin_browser.getControl('Add sponsorship level').click()
+TODO    >>> admin_browser.getControl('Name').value = 'Bronze'
+TODO    >>> admin_browser.getControl('Amount').value = '200'
+
+    >>> admin_browser.getControl(
+    ...     'Sponsorship Levels').value += '\nBronze,200'
+
     >>> admin_browser.getControl('Save').click()
     >>> print admin_browser.contents
     <...Changes saved...
-    Gold 5000 1...
-    Silver 1000 2...
-    Bronze 200...
+    >>> admin_browser.getLink('Sponsorship settings').click()
+    >>> print admin_browser.contents
+    <...Gold,5000,1
+    Silver,1000,2
+    Bronze,200...
 
 -------------------
 Adding Sponsorships
@@ -90,7 +107,7 @@ Open a browser as a user with rights to add a sponsorship.
     >>> sponsor_browser.open(portal.absolute_url())
 
     >>> sponsor_browser.getLink('Log in').click()
-    >>> sponsor_browser.getControl('Login Name').value = TODO
+    >>> sponsor_browser.getControl('Login Name').value = 'test-user'
     >>> sponsor_browser.getControl('Password').value = 'secret'
     >>> sponsor_browser.getControl('Log in').click()
 
@@ -121,6 +138,7 @@ The sponsorship level field has no default.
 All these fields are required.
 
     >>> sponsor_browser.getControl('Save').click()
+    >>> print sponsor_browser.contents
     <...Please correct the indicated errors...
     ...Sponsor is required, please correct...
     ...Sponsorship Level is required, please correct...
@@ -155,6 +173,7 @@ Enter valid values for all the fields and save the sponsorship.
     ...     'Body Text').value = 'Foo Sponsor body text'
 
     >>> sponsor_browser.getControl('Save').click()
+    >>> print sponsor_browser.contents
     <...Changes saved...
     ...Foo Sponsor Title...
     ...Gold...
@@ -196,6 +215,7 @@ selectable on the add form.
 Save the new silver level sponsorship.
 
     >>> sponsor_browser.getControl('Save').click()
+    >>> print sponsor_browser.contents
     <...Changes saved...
     ...Bar Sponsor Title...
     ...Silver...
@@ -252,6 +272,7 @@ error is displayed to the user indicating the the silver level is no
 longer available.
 
     >>> sponsor_browser.getControl('Save').click()
+    >>> print sponsor_browser.contents
     <...Please correct the indicated errors...
     ...Sponsorship Level is invalid, please correct...
 
@@ -270,6 +291,7 @@ Successfully save the new sponsorship as a bronze sponsorship.
     ...         'Bronze - $200').selected = True
 
     >>> sponsor_browser.getControl('Save').click()
+    >>> print sponsor_browser.contents
     <...Changes saved...
     ...Qux Sponsor Title...
     ...Bronze...
@@ -328,6 +350,7 @@ form, demonstrating there is no limit.
     ...         'Bronze - $200').selected = True
 
     >>> sponsor_browser.getControl('Save').click()
+    >>> print sponsor_browser.contents
     <...Changes saved...
     ...Blah Sponsor Title...
     ...Bronze...
