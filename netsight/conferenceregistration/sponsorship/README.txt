@@ -183,7 +183,20 @@ Enter valid values for all the fields and save the sponsorship.
     ...link_icon.png...
 
 The gold level fee has been successfully charged using the payment
-information. 
+information when the sponsorship is published.
+
+    >>> from Products.CMFCore.utils import getToolByName
+    >>> wftool = getToolByName(portal, 'portal_workflow')
+
+    >>> from Acquisition import aq_parent
+    >>> from plone.app import testing
+    >>> testing.login(aq_parent(portal), 'admin')
+    >>> wftool.doActionFor(
+    ...     portal.sponsorships['foo-sponsor-title'], 'publish')
+    >>> testing.logout()
+
+    >>> import transaction
+    >>> transaction.commit()
 
     TODO $5000
 
@@ -228,6 +241,13 @@ Save the new silver level sponsorship.
 The silver level fee has been successfully charged using the payment
 information. 
 
+    >>> testing.login(aq_parent(portal), 'admin')
+    >>> wftool.doActionFor(
+    ...     portal.sponsorships['bar-sponsor-title'], 'publish')
+    >>> testing.logout()
+
+    >>> transaction.commit()
+
     TODO $1000
 
 Attempt to add another silver level sponsorship.
@@ -261,14 +281,17 @@ more sponsorship available at that level.
 Add another silver sponsorship in the meantime, exhausting the silver
 sponsorships available.
 
+    >>> testing.login(aq_parent(portal), 'admin')
     >>> portal.sponsorships.invokeFactory(
     ...     type_name='netsight.conferenceregistration.sponsor',
-    ...     id='baz-sponsorship-title',
-    ...     title='Baz Sponsorship Title',
+    ...     id='baz-sponsor-title',
+    ...     title='Baz Sponsor Title',
     ...     level=1)
-    'baz-sponsorship-title'
+    'baz-sponsor-title'
+    >>> wftool.doActionFor(
+    ...     portal.sponsorships['baz-sponsor-title'], 'publish')
+    >>> testing.logout()
 
-    >>> import transaction
     >>> transaction.commit()
 
 Attempt to save the silver sponsorship in progress.  A validation
@@ -307,26 +330,38 @@ TODO    LookupError: label 'Silver - $1000'
 The bronze level fee has been successfully charged using the payment
 information.
 
+    >>> testing.login(aq_parent(portal), 'admin')
+    >>> wftool.doActionFor(
+    ...     portal.sponsorships['qux-sponsor-title'], 'publish')
+    >>> testing.logout()
+
+    >>> transaction.commit()
+
     TODO $200
 
 Add 2 more bronze sponsorships then add another sponsorship using the
 form, demonstrating there is no limit.
 
+    >>> testing.login(aq_parent(portal), 'admin')
     >>> portal.sponsorships.invokeFactory(
     ...     type_name='netsight.conferenceregistration.sponsor',
-    ...     id='bah-sponsorship-title',
-    ...     title='Bah Sponsorship Title',
+    ...     id='bah-sponsor-title',
+    ...     title='Bah Sponsor Title',
     ...     level=2)
-    'bah-sponsorship-title'
+    'bah-sponsor-title'
+    >>> wftool.doActionFor(
+    ...     portal.sponsorships['bah-sponsor-title'], 'publish')
 
     >>> portal.sponsorships.invokeFactory(
     ...     type_name='netsight.conferenceregistration.sponsor',
-    ...     id='quux-sponsorship-title',
-    ...     title='Quux Sponsorship Title',
+    ...     id='quux-sponsor-title',
+    ...     title='Quux Sponsor Title',
     ...     level=2)
-    'quux-sponsorship-title'
+    'quux-sponsor-title'
+    >>> wftool.doActionFor(
+    ...     portal.sponsorships['quux-sponsor-title'], 'publish')
+    >>> testing.logout()
 
-    >>> import transaction
     >>> transaction.commit()
 
     >>> sponsor_browser.getLink('Sponsorships').click()
@@ -364,6 +399,13 @@ form, demonstrating there is no limit.
     ...Blah Sponsor body text...
     ...file_icon.png...
 
+    >>> testing.login(aq_parent(portal), 'admin')
+    >>> wftool.doActionFor(
+    ...     portal.sponsorships['blah-sponsor-title'], 'publish')
+    >>> testing.logout()
+
+    >>> transaction.commit()
+
 --------------------
 Sponsorships Viewlet
 --------------------
@@ -375,48 +417,154 @@ Open a browser as an anonymous user.
 
     >>> anon_browser = z2.Browser(app)
     >>> anon_browser.handleErrors = False
+
+Now the viewlet shows all levels and sponsorships.
+
     >>> anon_browser.open(portal.absolute_url())
-
-The viewlet only lists sponsorships which have been published.  Since
-none have been published yet, the viewlet lists doesn't list any
-sponsorships or levels.
-
-    >>> anon_browser.open(TODO)
     >>> print anon_browser.contents
     <...
     <div id="sponsorships">
+      <h2>Sponsorships</h2>
+      <dl id="sponsorship-level-0">
+        <dt>Gold</dt>
+        <dd><dl>
+          <dt>
+            <a
+            href="http://nohost/plone/sponsorships/foo-sponsor-title">Foo
+            Sponsor Title</a>
+          </dt>
+          <dd>
+            <a
+            href="http://nohost/plone/sponsorships/foo-sponsor-title">
+            <img alt="Foo Sponsor Title"
+            src="http://nohost/plone/sponsorships/foo-sponsor-title/@@download/image"
+            />
+            </a>
+          </dd>
+        </dl></dd>
+      </dl>
+      <dl id="sponsorship-level-1">
+        <dt>Silver</dt>
+        <dd><dl>
+          <dt>
+            <a
+            href="http://nohost/plone/sponsorships/bar-sponsor-title">Bar
+            Sponsor Title</a>
+          </dt>
+          <dd>
+            <a
+            href="http://nohost/plone/sponsorships/bar-sponsor-title">
+            <img alt="Bar Sponsor Title"
+            src="http://nohost/plone/sponsorships/bar-sponsor-title/@@download/image"
+            />
+            </a>
+          </dd>
+          <dt>
+            <a
+            href="http://nohost/plone/sponsorships/baz-sponsor-title">Baz
+            Sponsor Title</a>
+          </dt>
+          <dd>
+            <a
+            href="http://nohost/plone/sponsorships/baz-sponsor-title">
+            <img alt="Baz Sponsor Title"
+            src="http://nohost/plone/sponsorships/baz-sponsor-title/@@download/image"
+            />
+            </a>
+          </dd>
+        </dl></dd>
+      </dl>
+      <dl id="sponsorship-level-2">
+        <dt>Bronze</dt>
+        <dd><dl>
+          <dt>
+            <a
+            href="http://nohost/plone/sponsorships/qux-sponsor-title">Qux
+            Sponsor Title</a>
+          </dt>
+          <dd>
+            <a
+            href="http://nohost/plone/sponsorships/qux-sponsor-title">
+            <img alt="Qux Sponsor Title"
+            src="http://nohost/plone/sponsorships/qux-sponsor-title/@@download/image"
+            />
+            </a>
+          </dd>
+          <dt>
+            <a
+            href="http://nohost/plone/sponsorships/bah-sponsor-title">Bah
+            Sponsor Title</a>
+          </dt>
+          <dd>
+            <a
+            href="http://nohost/plone/sponsorships/bah-sponsor-title">
+            <img alt="Bah Sponsor Title"
+            src="http://nohost/plone/sponsorships/bah-sponsor-title/@@download/image"
+            />
+            </a>
+          </dd>
+          <dt>
+            <a
+            href="http://nohost/plone/sponsorships/quux-sponsor-title">Quux
+            Sponsor Title</a>
+          </dt>
+          <dd>
+            <a
+            href="http://nohost/plone/sponsorships/quux-sponsor-title">
+            <img alt="Quux Sponsor Title"
+            src="http://nohost/plone/sponsorships/quux-sponsor-title/@@download/image"
+            />
+            </a>
+          </dd>
+          <dt>
+            <a
+            href="http://nohost/plone/sponsorships/blah-sponsor-title">Blah
+            Sponsor Title</a>
+          </dt>
+          <dd>
+            <a
+            href="http://nohost/plone/sponsorships/blah-sponsor-title">
+            <img alt="Blah Sponsor Title"
+            src="http://nohost/plone/sponsorships/blah-sponsor-title/@@download/image"
+            />
+            </a>
+          </dd>
+        </dl></dd>
+      </dl>
     </div>...
 
-Publish one silver level.
+The viewlet only lists the levels with sponsorships which have been
+published.  Retract all but one silver sponsorship.
 
-    >>> from Products.CMFCore.utils import getToolByName
-    >>> wftool = getToolByName(portal, 'portal_workflow')
-
-    >>> wftool.doActionFor(
-    ...     portal.sponsorships['bar-sponsorship-title'], 'publish')
+    >>> testing.login(aq_parent(portal), 'admin')
+    >>> for sponsorship in portal.sponsorships.contentValues():
+    ...     if sponsorship.getId() == 'bar-sponsor-title':
+    ...         continue
+    ...     wftool.doActionFor(sponsorship, 'retract')
+    >>> testing.logout()
 
     >>> transaction.commit()
 
 Now the viewlet shows one level and one sponsorship.
 
-    >>> anon_browser.open(TODO)
+    >>> anon_browser.open(portal.absolute_url())
     >>> print anon_browser.contents
     <...
     <div id="sponsorships">
       <h2>Sponsorships</h2>
-      <dl id="sponsorship-level-2">
+      <dl id="sponsorship-level-1">
         <dt>Silver</dt>
         <dd><dl>
           <dt>
             <a
-            href="http://nohost/plone/sponsorships/bar-sponsorship-title">Bar
-            Sponsorship Title</a>
+            href="http://nohost/plone/sponsorships/bar-sponsor-title">Bar
+            Sponsor Title</a>
           </dt>
           <dd>
             <a
-            href="http://nohost/plone/sponsorships/bar-sponsorship-title">
-            <img alt="Bar Sponsorship Title"
-            src="http://nohost/plone/sponsorships/bar-sponsorship-title/image_mini"
+            href="http://nohost/plone/sponsorships/bar-sponsor-title">
+            <img alt="Bar Sponsor Title"
+            src="http://nohost/plone/sponsorships/bar-sponsor-title/@@download/image"
             />
             </a>
           </dd>
@@ -424,127 +572,18 @@ Now the viewlet shows one level and one sponsorship.
       </dl>
     </div>...
 
-Publish the rest of the sponsorships.
+If no sponsorships have been published yet, the viewlet lists doesn't
+list any sponsorships or levels.
 
-    >>> for sponsorship in portal.sponsorships.contentValues():
-    ...     if wftool.getInfoFor(
-    ...         sponsorship, 'review_state') == 'published':
-    ...         continue
-    ...     wftool.doActionFor(sponsorship, 'publish')
+    >>> testing.login(aq_parent(portal), 'admin')
+    >>> wftool.doActionFor(
+    ...     portal.sponsorships['bar-sponsor-title'], 'retract')
+    >>> testing.logout()
 
     >>> transaction.commit()
 
-Now the viewlet shows all levels and sponsorships.
-
-    >>> anon_browser.open(TODO)
+    >>> anon_browser.open(portal.absolute_url())
     >>> print anon_browser.contents
     <...
     <div id="sponsorships">
-      <h2>Sponsorships</h2>
-      <dl id="sponsorship-level-1">
-        <dt>Gold</dt>
-        <dd><dl>
-          <dt>
-            <a
-            href="http://nohost/plone/sponsorships/foo-sponsorship-title">Foo
-            Sponsorship Title</a>
-          </dt>
-          <dd>
-            <a
-            href="http://nohost/plone/sponsorships/foo-sponsorship-title">
-            <img alt="Foo Sponsorship Title"
-            src="http://nohost/plone/sponsorships/foo-sponsorship-title/image_mini"
-            />
-            </a>
-          </dd>
-        </dl></dd>
-      </dl>
-      <dl id="sponsorship-level-2">
-        <dt>Silver</dt>
-        <dd><dl>
-          <dt>
-            <a
-            href="http://nohost/plone/sponsorships/bar-sponsorship-title">Bar
-            Sponsorship Title</a>
-          </dt>
-          <dd>
-            <a
-            href="http://nohost/plone/sponsorships/bar-sponsorship-title">
-            <img alt="Bar Sponsorship Title"
-            src="http://nohost/plone/sponsorships/bar-sponsorship-title/image_mini"
-            />
-            </a>
-          </dd>
-          <dt>
-            <a
-            href="http://nohost/plone/sponsorships/baz-sponsorship-title">Baz
-            Sponsorship Title</a>
-          </dt>
-          <dd>
-            <a
-            href="http://nohost/plone/sponsorships/baz-sponsorship-title">
-            <img alt="Baz Sponsorship Title"
-            src="http://nohost/plone/sponsorships/baz-sponsorship-title/image_mini"
-            />
-            </a>
-          </dd>
-        </dl></dd>
-      </dl>
-      <dl id="sponsorship-level-3">
-        <dt>Bronze</dt>
-        <dd><dl>
-          <dt>
-            <a
-            href="http://nohost/plone/sponsorships/qux-sponsorship-title">Qux
-            Sponsorship Title</a>
-          </dt>
-          <dd>
-            <a
-            href="http://nohost/plone/sponsorships/qux-sponsorship-title">
-            <img alt="Qux Sponsorship Title"
-            src="http://nohost/plone/sponsorships/qux-sponsorship-title/image_mini"
-            />
-            </a>
-          </dd>
-          <dt>
-            <a
-            href="http://nohost/plone/sponsorships/bah-sponsorship-title">Bah
-            Sponsorship Title</a>
-          </dt>
-          <dd>
-            <a
-            href="http://nohost/plone/sponsorships/bah-sponsorship-title">
-            <img alt="Bah Sponsorship Title"
-            src="http://nohost/plone/sponsorships/bah-sponsorship-title/image_mini"
-            />
-            </a>
-          </dd>
-          <dt>
-            <a
-            href="http://nohost/plone/sponsorships/quux-sponsorship-title">Quux
-            Sponsorship Title</a>
-          </dt>
-          <dd>
-            <a
-            href="http://nohost/plone/sponsorships/quux-sponsorship-title">
-            <img alt="Quux Sponsorship Title"
-            src="http://nohost/plone/sponsorships/quux-sponsorship-title/image_mini"
-            />
-            </a>
-          </dd>
-          <dt>
-            <a
-            href="http://nohost/plone/sponsorships/blah-sponsorship-title">Blah
-            Sponsorship Title</a>
-          </dt>
-          <dd>
-            <a
-            href="http://nohost/plone/sponsorships/blah-sponsorship-title">
-            <img alt="Blah Sponsorship Title"
-            src="http://nohost/plone/sponsorships/blah-sponsorship-title/image_mini"
-            />
-            </a>
-          </dd>
-        </dl></dd>
-      </dl>
     </div>...

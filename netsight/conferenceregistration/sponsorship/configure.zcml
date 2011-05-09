@@ -15,4 +15,13 @@
      class=".controlpanel.SponsorshipControlPanelView"
      />
 
+  <browser:viewlet
+     name="netsight.conferenceregistration.sponsors"
+     for="Products.CMFPlone.interfaces.IPloneSiteRoot"
+     manager="plone.app.layout.viewlets.interfaces.IBelowContent"
+     class=".viewlet.SponsorsViewlet"
+     template="viewlet.pt"
+     permission="zope2.View"
+     />
+
 </configure>
