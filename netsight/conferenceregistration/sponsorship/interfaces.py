@@ -14,16 +14,43 @@ from plone.registry.interfaces import IRegistry
 from plone.registry import field as reg_field
 
 
+class SimpleVocabulary(vocabulary.SimpleVocabulary):
+
+    def __init__(self, context):
+        registry = getUtility(IRegistry)
+        levels = [
+            tuple(level.split(',')) for level in
+            registry[ISponsorshipSettings.__identifier__+'.levels']]
+        self.max_by_idx = max_by_idx = dict(
+            (idx, int(level[2])) for idx, level in enumerate(levels)
+            if len(level) == 3)
+
+        self.counts = counts = {}
+        for sponsor in context.contentValues(dict(
+            portal_type='netsight.conferenceregistration.sponsor')):
+            level = sponsor.level
+            if level in max_by_idx:
+                count = counts.get(level, 0) + 1
+                counts[level] = count
+
+        super(SimpleVocabulary, self).__init__([
+            vocabulary.SimpleTerm(idx, title=u'%s - $%s' % level[:2])
+            for idx, level in enumerate(levels)])
+
+    def __iter__(self):
+        """Skip levels whose max has been reached."""
+        for idx, term in enumerate(
+            super(SimpleVocabulary, self).__iter__()):
+            if (idx not in self.max_by_idx or
+                self.counts.get(idx, 0) < self.max_by_idx[idx]):
+                yield term
+            
+
 class LevelsSourceBinder(object):
     interface.implements(interfaces.IContextSourceBinder)
 
     def __call__(self, context):
-        registry = getUtility(IRegistry)
-        levels = registry[ISponsorshipSettings.__identifier__+'.levels']
-        return vocabulary.SimpleVocabulary([
-            vocabulary.SimpleTerm(
-                idx, title=level.split(',', 1)[0].strip())
-            for idx, level in enumerate(levels)])
+        return SimpleVocabulary(context)
 
 
 class ISponsorshipLevel(Interface):
