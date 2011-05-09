@@ -6,7 +6,7 @@
 	  meta_type="Filesystem Directory View"
 	  directory="netsight.conferenceregistration:skins/netsight_conferenceregistration_custom_images"/>
   
-  <skin-path name="Plone Conf 2010 Registration" based-on="">
+  <skin-path name="Plone Conf Registration" based-on="">
    <layer name="netsight_conferenceregistration_custom_images"
 	   insert-after="custom"/>
   </skin-path>

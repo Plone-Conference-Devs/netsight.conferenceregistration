@@ -1,4 +1,10 @@
 from Products.Five import BrowserView
+import logging
+from random import randint
+import os.path
+import smtplib
+from Products.CMFCore.utils import getToolByName
+from netsight.conferenceregistration import regutils
 
 
 class email(BrowserView):
@@ -7,11 +13,7 @@ class email(BrowserView):
         return self.sendemail()
 
     def sendemail(self):
-        # Try and send them an email about the registration
-        from random import randint
-        import os.path
-        import smtplib
-
+        """ Send confirmation email about registration """
         attendee = self.context
 
         try:
@@ -22,22 +24,22 @@ class email(BrowserView):
             id = "%04d-%04d-%04d" % (randint(0,9999), randint(0,9999), randint(0,9999))
             msg = template % dict(id=id, 
                                   firstname=attendee.firstname, 
-                                  key=attendee.uid,
+                                  key=attendee.getId(),
                                   email=attendee.email, 
+                                  year=regutils.getConferenceYear(),
                                   )
             msg = msg.encode('utf-8')
 
-            fromaddr = 'info@ploneconf2010.org'
-            toaddrs = [attendee.email, 'info@ploneconf2010.org',]
+            fromaddr = 'info@ploneconf.org'
+            toaddrs = [attendee.email, fromaddr,]
+            
+            mh = getToolByName(self.context, 'MailHost')
+            mh.send(msg, mto=toaddrs, mfrom=fromaddr, 
+                    encode='utf8', charset='utf8')
+            
+            return True
 
-            server = smtplib.SMTP('mail.netsight.co.uk')
-            server.set_debuglevel(1)
-
-            server.sendmail(fromaddr, toaddrs, msg)
-            server.quit()
-
-            return "email sent"
-
-        except:
-            print "Count not send mail to: %s" % attendee.email
-            return "Count not send mail to: %s" % attendee.email
+        except Exception, e:
+            logging.error( "Count not send mail to: %s : %s" % (attendee.email, e))
+        
+        return False

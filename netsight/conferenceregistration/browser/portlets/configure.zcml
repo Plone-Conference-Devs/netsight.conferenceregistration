@@ -11,7 +11,7 @@
 
 
     <plone:portlet
-        name="ploneconf2010.cart"
+        name="ploneconf.cart"
         interface=".cart.IRegistrationsPortlet"
         assignment=".cart.Assignment"
         renderer=".cart.Renderer"

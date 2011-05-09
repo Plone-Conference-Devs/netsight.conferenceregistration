@@ -93,7 +93,7 @@ class IAttendee(form.Schema):
         )
 
     shirt = Choice(
-        title=u'Plone Conference 2010 T-Shirt size',
+        title=u'Conference T-Shirt size',
         required=True,
         vocabulary="netsight.conferenceregistration.shirts"
         )
@@ -161,7 +161,7 @@ class IAttendee(form.Schema):
         )
 
     mailing_list = Bool(
-        title=u'Add me to the Plone Conference 2010 mailing list',
+        title=u'Add me to the Plone Conference mailing list',
         description=u'This will be a low volume mailout with updates and information prior to the conference',
         required=True,
         default=True,

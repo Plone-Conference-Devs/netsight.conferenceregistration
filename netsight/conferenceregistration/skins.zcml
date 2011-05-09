@@ -4,6 +4,6 @@
     i18n_domain="netsight.conferenceregistration">
 
   <!-- File System Directory Views registration -->
-  <cmf:registerDirectory name="netsight_ploneconf2010_registration_custom_images"/>
+  <cmf:registerDirectory name="netsight_ploneconf_registration_custom_images"/>
 
 </configure>

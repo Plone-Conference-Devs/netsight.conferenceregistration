@@ -19,8 +19,8 @@
     <!-- Register an extension profile to make the product installable -->
     <genericsetup:registerProfile
         name="default"
-        title="Plone Conference 2010 Registration System"
-        description="Plone Conference 2010 Registration System"
+        title="Plone Conference Registration System"
+        description="Plone Conference Registration System"
         directory="profiles/default"
         provides="Products.GenericSetup.interfaces.EXTENSION"
         />

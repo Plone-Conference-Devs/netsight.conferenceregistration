@@ -1,3 +1,4 @@
+import logging
 from five import grok
 from plone.directives import form
 
@@ -22,6 +23,10 @@ from Products.Five.browser.pagetemplatefile import ViewPageTemplateFile
 from netsight.conferenceregistration.interfaces import IRegistrationFolder
 
 from getpaid.brownpapertickets.item import BPTEventLineItem
+
+from netsight.conferenceregistration.browser.email import email
+from netsight.conferenceregistration import regutils
+
 
 class ContactGroup(group.Group):
     label=u"Contact Details"
@@ -72,10 +77,14 @@ class RegistrationForm(group.GroupForm, form.Form):
 
     template = ViewPageTemplateFile('templates/registration_form.pt')
 
-    label = _(u"Register for Plone Conference 2010")
+    label = _(u"Register for Plone Conference %s"%regutils.getConferenceYear())
 
     enable_form_tabbing = False
 
+    
+    def getConferenceYear(self):
+        return regutils.getConferenceYear()
+    
     def update(self):
         # disable Plone's editable border
         self.request.set('disable_border', True)
@@ -160,6 +169,7 @@ class RegistrationForm(group.GroupForm, form.Form):
         
 
     def addToCart(self, attendee):
+        year = regutils.getConferenceYear()
         utility = component.getUtility( interfaces.IShoppingCartUtility )
         cart = utility.get(self.context, create=True)
         
@@ -186,9 +196,9 @@ class RegistrationForm(group.GroupForm, form.Form):
 #        ticket = ticket_vocab.getTerm(attendee.ticket).token
 
         if attendee.discount_code:
-            nitem.name = "Plone Conference 2010 ticket (%s) - %s" % (attendee.discount_code, attendee.Title())
+            nitem.name = "Plone Conference %s Ticket (%s) - %s" % (year, attendee.discount_code, attendee.Title())
         else:
-            nitem.name = "Plone Conference 2010 ticket - %s" % attendee.Title()
+            nitem.name = "Plone Conference %s Ticket - %s" % (year, attendee.Title())
         nitem.description = nitem.name # description
         nitem.cost = cost
         nitem.quantity = 1
@@ -200,7 +210,6 @@ class RegistrationForm(group.GroupForm, form.Form):
 
         # send email with details to get registration back
         if cost != 0:
-            from netsight.conferenceregistration.browser.email import email
             email(attendee, self.context).sendemail()
 
-        print "Added!", nitem.item_id
+        logging.debug("Added!", nitem.item_id)

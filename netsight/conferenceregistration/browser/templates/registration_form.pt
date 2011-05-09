@@ -7,15 +7,16 @@
       
     <metal:block fill-slot="main">
         
-        <h1 class="documentFirstHeading" tal:content="view/label | nothing" />
+    <h1 class="documentFirstHeading" tal:content="view/label | nothing" />
         
 	<img src="/pc_register.jpg"
 	     class="image-right"
 	     width="281" 
 	     height="216" 
-	     alt="Plone Conference 2009 delegates" />
+	     alt="Last years Plone Conference delegates" />
 
-	<p>To register for Plone Conference 2010, fill in the registration form below.
+	<p>To register for Plone Conference <span tal:content="view/getConferenceYear"/>, 
+	  fill in the registration form below.
 	  If you are registering a number of people then you will have a chance to add
 	  multiple registrations to your cart before checking out to pay.</p>
 

@@ -56,7 +56,6 @@ countries = [
     'Spain', 'Sri Lanka', 'Sudan', 'Suriname', 'Swaziland',
     'Sweden', 'Switzerland', 'Syria', 'Taiwan',
     'Tajikistan','Tanzania', 'Thailand', 'Togo', 'Tonga',
-
     'Trinidad and Tobago', 'Tunisia', 'Turkey', 'Turkmenistan',
     'Tuvalu', 'Uganda', 'Ukraine', 'United Arab Emirates',
     'United Kingdom', 'United States', 'Uruguay', 'Uzbekistan', 'Vanuatu', 'Vatican City',

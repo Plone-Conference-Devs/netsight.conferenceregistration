@@ -24,16 +24,6 @@
      weight="10"
      />
 
-  <!-- <browser:page
-     for="*"
-     name="getpaid-checkout-wizard"
-     class="getpaid.paypal.browser.paypalbutton.PaypalButtonView"
-     template="templates/paypalbutton.pt"
-     permission="zope2.View"
-     layer="netsight.ploneconf2010_theme.browser.interfaces.IThemeSpecific"
-
-     /> -->
-
   <browser:viewlet
      name="order-listing"
      manager="Products.PloneGetPaid.interfaces.IOrdersAdminManager"

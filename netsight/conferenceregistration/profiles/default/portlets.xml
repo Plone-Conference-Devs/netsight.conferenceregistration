@@ -4,7 +4,7 @@
  <!-- Portlet type registrations -->
 
  <portlet
-   addview="ploneconf2010.cart"
+   addview="ploneconf.cart"
    title="Registrations Portlet"
    />
 

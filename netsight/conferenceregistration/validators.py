@@ -6,11 +6,11 @@ EMAIL_RE = "^([0-9a-zA-Z_&.+-]+!)*[0-9a-zA-Z_&.+-]+@(([0-9a-zA-Z]([0-9a-zA-Z-]*[
 mailre = re.compile(EMAIL_RE)
 
 class EMailException(zope.schema.ValidationError):
-    __doc__ = u"Please use a valid email address like info@ploneconf2010.org"
+    __doc__ = u"Please use a valid email address like info@ploneconf.org"
     zope.interface.implements(zope.app.form.interfaces.IWidgetInputError)
 
 class UrlException(zope.schema.ValidationError):
-    __doc__ = u"""Please use a valid url like http://ploneconf2010.org"""
+    __doc__ = u"""Please use a valid url like http://ploneconf.org"""
     zope.interface.implements(zope.app.form.interfaces.IWidgetInputError)
 
 class DiscountException(zope.schema.ValidationError):
