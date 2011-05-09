@@ -38,9 +38,9 @@ The name and amount sponsorship level fields are required.
 
 TODO    >>> admin_browser.getControl('Add sponsorship level').click()
 TODO    >>> admin_browser.getControl('Save').click()
-TODO    <...Please correct the indicated errors...
-TODO    ...Name is required, please correct...
-TODO    ...Amount is required, please correct...
+TODO    <...There were some errors...
+TODO    ...Name...Required input is missing...
+TODO    ...Amount...Required input is missing...
 
 Add the gold sponsorship level limited to 1 sponsorship.
 
@@ -116,34 +116,36 @@ types used to limit the allowed types to the sponsorship type, and add
 a new gold sponsorship.
 
     >>> sponsor_browser.getLink('Sponsorships').click()
-    >>> sponsor_browser.getLink('Add Sponsorship').click()
+    >>> sponsor_browser.getLink(
+    ...     url="++add++netsight.conferenceregistration.sponsor").click()
 
 The sponsorship object has fields for the sponsor name, sponsorship
 level, an image and arbitrary WYSIWYG content.
 
-    >>> sponsor_browser.getControl('Sponsor')
-    <Control name='title' type='text'>
+    >>> sponsor_browser.getControl('Name')
+    <Control name='form.widgets.title' type='text'>
     >>> sponsor_browser.getControl('Sponsorship Level')
-    <Control name='level' type='text'>
-    >>> sponsor_browser.getControl(name='image_file')
-    <Control name='image' type='file'>
-    >>> sponsor_browser.getControl('Body Text')
-    <Control name='text' type='textarea'>
+    <ListControl name='form.widgets.level:list' type='select'>
+    >>> sponsor_browser.getControl(name='form.widgets.image')
+    <Control name='form.widgets.image' type='file'>
+    >>> sponsor_browser.getControl(name='form.widgets.text')
+    <Control name='form.widgets.text' type='textarea'>
 
 The sponsorship level field has no default.
 
     >>> sponsor_browser.getControl('Sponsorship Level').value
-    []
+    ['--NOVALUE--']
 
 All these fields are required.
 
     >>> sponsor_browser.getControl('Save').click()
     >>> print sponsor_browser.contents
-    <...Please correct the indicated errors...
-    ...Sponsor is required, please correct...
-    ...Sponsorship Level is required, please correct...
-    ...Body Text is required, please correct...
-    ...Image is required, please correct...
+    <...There were some errors...
+    ...Name...Required input is missing...
+    ...Sponsorship Level...Required input is missing...
+    ...Image...Required input is missing...
+
+TODO    ...Body Text...Required input is missing...
 
 The payment information fields are required.
 
@@ -156,7 +158,7 @@ user.
 
 Enter valid values for all the fields and save the sponsorship.
 
-    >>> sponsor_browser.getControl('Sponsor').value = 'Foo Sponsor Title'
+    >>> sponsor_browser.getControl('Name').value = 'Foo Sponsor Title'
     >>> sponsor_browser.getControl(
     ...     'Sponsorship Level').getControl('Gold - $5000').selected = True
 
@@ -166,11 +168,11 @@ Enter valid values for all the fields and save the sponsorship.
     >>> image = open(os.path.join(
     ...     os.path.dirname(CMFPlone.__file__),
     ...     'skins', 'plone_images', 'link_icon.png'))
-    >>> sponsor_browser.getControl(name='image_file').add_file(
+    >>> sponsor_browser.getControl(name='form.widgets.image').add_file(
     ...     image, 'image/png', 'link_icon.png')
 
     >>> sponsor_browser.getControl(
-    ...     'Body Text').value = 'Foo Sponsor body text'
+    ...     name='form.widgets.text').value = 'Foo Sponsor body text'
 
     >>> sponsor_browser.getControl('Save').click()
     >>> print sponsor_browser.contents
@@ -188,18 +190,19 @@ information.
 Add a silver sponsorship.
 
     >>> sponsor_browser.getLink('Sponsorships').click()
-    >>> sponsor_browser.getLink('Add Sponsorship').click()
+    >>> sponsor_browser.getLink(
+    ...     url="++add++netsight.conferenceregistration.sponsor").click()
 
-    >>> sponsor_browser.getControl('Sponsor').value = 'Bar Sponsor Title'
+    >>> sponsor_browser.getControl('Name').value = 'Bar Sponsor Title'
 
     >>> image = open(os.path.join(
     ...     os.path.dirname(CMFPlone.__file__),
     ...     'skins', 'plone_images', 'event_icon.png'))
-    >>> sponsor_browser.getControl(name='image_file').add_file(
+    >>> sponsor_browser.getControl(name='form.widgets.image').add_file(
     ...     image, 'image/png', 'event_icon.png')
 
     >>> sponsor_browser.getControl(
-    ...     'Body Text').value = 'Bar Sponsor body text'
+    ...     name='form.widgets.text').value = 'Bar Sponsor body text'
 
 Only the sponsorship levels that have not reached their limit are
 selectable on the add form.
@@ -230,18 +233,19 @@ information.
 Attempt to add another silver level sponsorship.
 
     >>> sponsor_browser.getLink('Sponsorships').click()
-    >>> sponsor_browser.getLink('Add Sponsorship').click()
+    >>> sponsor_browser.getLink(
+    ...     url="++add++netsight.conferenceregistration.sponsor").click()
 
-    >>> sponsor_browser.getControl('Sponsor').value = 'Qux Sponsor Title'
+    >>> sponsor_browser.getControl('Name').value = 'Qux Sponsor Title'
 
     >>> image = open(os.path.join(
     ...     os.path.dirname(CMFPlone.__file__),
     ...     'skins', 'plone_images', 'file_icon.png'))
-    >>> sponsor_browser.getControl(name='image_file').add_file(
+    >>> sponsor_browser.getControl(name='form.widgets.image').add_file(
     ...     image, 'image/png', 'file_icon.png')
 
     >>> sponsor_browser.getControl(
-    ...     'Body Text').value = 'Qux Sponsor body text'
+    ...     name='form.widgets.text').value = 'Qux Sponsor body text'
 
 The silver level sponsorship is still available since there is one
 more sponsorship available at that level.
@@ -273,7 +277,7 @@ longer available.
 
     >>> sponsor_browser.getControl('Save').click()
     >>> print sponsor_browser.contents
-    <...Please correct the indicated errors...
+    <...There were some errors...
     ...Sponsorship Level is invalid, please correct...
 
 Successfully save the new sponsorship as a bronze sponsorship.
@@ -324,18 +328,19 @@ form, demonstrating there is no limit.
     >>> transaction.commit()
 
     >>> sponsor_browser.getLink('Sponsorships').click()
-    >>> sponsor_browser.getLink('Add Sponsorship').click()
+    >>> sponsor_browser.getLink(
+    ...     url="++add++netsight.conferenceregistration.sponsor").click()
 
-    >>> sponsor_browser.getControl('Sponsor').value = 'Blah Sponsor Title'
+    >>> sponsor_browser.getControl('Name').value = 'Blah Sponsor Title'
 
     >>> image = open(os.path.join(
     ...     os.path.dirname(CMFPlone.__file__),
     ...     'skins', 'plone_images', 'file_icon.png'))
-    >>> sponsor_browser.getControl(name='image_file').add_file(
+    >>> sponsor_browser.getControl(name='form.widgets.image').add_file(
     ...     image, 'image/png', 'file_icon.png')
 
     >>> sponsor_browser.getControl(
-    ...     'Body Text').value = 'Blah Sponsor body text'
+    ...     name='form.widgets.text').value = 'Blah Sponsor body text'
 
     >>> sponsor_browser.getControl(
     ...     'Sponsorship Level').getControl('Gold - $5000')
