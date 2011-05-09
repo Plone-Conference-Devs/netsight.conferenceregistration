@@ -13,36 +13,62 @@ from plone.namedfile import field
 from plone.registry.interfaces import IRegistry
 from plone.registry import field as reg_field
 
+from Products.CMFCore.utils import getToolByName
+
 
 class SimpleVocabulary(vocabulary.SimpleVocabulary):
 
     def __init__(self, context):
+        # Retrieve the control panel setting
         registry = getUtility(IRegistry)
-        levels = [
-            tuple(level.split(',')) for level in
-            registry[ISponsorshipSettings.__identifier__+'.levels']]
-        self.max_by_idx = max_by_idx = dict(
-            (idx, int(level[2])) for idx, level in enumerate(levels)
-            if len(level) == 3)
+        setting = registry[
+            ISponsorshipSettings.__identifier__+'.levels'] or ()
 
+        # Assemble the terms and add attributes for the amount and
+        # optionally the maximum
+        terms = []
+        for idx, level in enumerate(setting):
+            level = level.split(',')
+            name = level[0]
+            amount = int(level[1])
+            term = vocabulary.SimpleTerm(
+                idx, title=u'%s - $%s' % (name, amount))
+            term.name = name
+            term.amount = amount
+            if len(level) == 3:
+                term.maximum = int(level[2])
+            terms.append(term)
+
+        # Let the vocabulary finish assembly, including the by_value
+        # mapping we need below for getTerm()
+        super(SimpleVocabulary, self).__init__(terms)
+
+        # Collect and count the sponsors for each level
         self.counts = counts = {}
-        for sponsor in context.contentValues(dict(
-            portal_type='netsight.conferenceregistration.sponsor')):
-            level = sponsor.level
-            if level in max_by_idx:
-                count = counts.get(level, 0) + 1
-                counts[level] = count
-
-        super(SimpleVocabulary, self).__init__([
-            vocabulary.SimpleTerm(idx, title=u'%s - $%s' % level[:2])
-            for idx, level in enumerate(levels)])
+        catalog = getToolByName(context, 'portal_catalog')
+        for brain in catalog(
+            path='/'.join(context.getPhysicalPath()),
+            portal_type='netsight.conferenceregistration.sponsor',
+            review_state='published',
+            sort_on='getObjPositionInParent'):
+            sponsor = brain.getObject()
+            
+            idx = sponsor.level
+            term = self.getTerm(idx)
+            if not hasattr(term, 'sponsors'):
+                term.sponsors = []
+            term.sponsors.append(sponsor)
+            if hasattr(term, 'maximum'):
+                count = counts.get(idx, 0) + 1
+                counts[idx] = count
 
     def __iter__(self):
         """Skip levels whose max has been reached."""
         for idx, term in enumerate(
             super(SimpleVocabulary, self).__iter__()):
-            if (idx not in self.max_by_idx or
-                self.counts.get(idx, 0) < self.max_by_idx[idx]):
+            term = self.getTerm(idx)
+            if (not hasattr(term, 'maximum') or
+                self.counts.get(idx, 0) < term.maximum):
                 yield term
             
 
