@@ -1,9 +1,5 @@
 from plone.app import testing
 
-from Acquisition import aq_parent
-
-from Products.CMFCore.utils import getToolByName
-
 
 class ConferenceFixture(testing.PloneSandboxLayer):
     default_bases = (testing.PLONE_FIXTURE,)
@@ -17,13 +13,6 @@ class ConferenceFixture(testing.PloneSandboxLayer):
         # Install into Plone site using portal_setup
         self.applyProfile(
             portal, 'netsight.conferenceregistration:default')
-
-        testing.login(aq_parent(portal), 'admin')
-        wftool = getToolByName(portal, 'portal_workflow')
-        wftool.doActionFor(portal.sponsorships, 'publish')
-        testing.logout()
-
-        portal.manage_setLocalRoles('AuthenticatedUsers', ('Contributor',))
 
 CONFERENCE_FIXTURE = ConferenceFixture()
 CONFERENCE_FUNCTIONAL_TESTING = testing.FunctionalTesting(

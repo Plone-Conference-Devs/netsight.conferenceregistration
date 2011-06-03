@@ -10,7 +10,6 @@ optionflags = (doctest.NORMALIZE_WHITESPACE |
 
 def test_suite():
     install_suite = doctest.DocFileSuite(
-        'sponsorship/README.txt',
         optionflags=optionflags)
     install_suite.layer = testing.CONFERENCE_FUNCTIONAL_TESTING
     return unittest.TestSuite([install_suite])

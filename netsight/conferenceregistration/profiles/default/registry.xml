@@ -1,5 +1,0 @@
-<registry>
-
-  <records interface="netsight.conferenceregistration.sponsorship.interfaces.ISponsorshipSettings" />
-
-</registry>

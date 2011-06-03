@@ -3,8 +3,6 @@ import os
 
 version = '1.0'
 
-test_require = ['plone.app.testing']
-
 setup(name='netsight.conferenceregistration',
       version=version,
       description="Plone Conference Registration System",
@@ -33,11 +31,7 @@ setup(name='netsight.conferenceregistration',
           'collective.autopermission',
           'getpaid.brownpapertickets',
           'ore.viewlet',
-          'Products.PloneGetPaid',
-          'plone.namedfile [blobs]',
       ],
-      test_require=test_require,
-      extras_require={'test': test_require},
       entry_points="""
       # -*- Entry points: -*-
 

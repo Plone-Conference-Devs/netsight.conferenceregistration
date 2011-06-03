@@ -9,7 +9,6 @@
     <includeDependencies package="." />
 
     <include package=".browser" />
-    <include package=".sponsorship" />
     <include file="vocabularies.zcml" />
     <include file="skins.zcml" />
 

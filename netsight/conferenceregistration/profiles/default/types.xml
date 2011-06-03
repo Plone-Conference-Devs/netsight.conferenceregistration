@@ -1,4 +1,3 @@
 <object name="portal_types">
  <object name="netsight.conferenceregistration.attendee" meta_type="Dexterity FTI" />
- <object name="netsight.conferenceregistration.sponsor" meta_type="Dexterity FTI" />
 </object>
